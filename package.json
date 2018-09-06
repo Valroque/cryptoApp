@@ -1,0 +1,31 @@
+{
+  "name": "cryptoapp",
+  "version": "1.0.0",
+  "description": "A platform with both crypto and real currencies, and users with ability to trade crypto for real or vice versa. Users can also buy crypto and real from the platform itself, depending in the availability. Is this how these crypto sites work?IDK. The app will try to handle at least a 100 transactions every second. :",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Valroque/crytoApp.git"
+  },
+  "keywords": [
+    "Crypto",
+    "web3.js",
+    "web3",
+    "wallet"
+  ],
+  "author": "Sparsh Jain",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Valroque/crytoApp/issues"
+  },
+  "homepage": "https://github.com/Valroque/crytoApp#readme",
+  "dependencies": {
+    "connect-redis": "^3.3.3",
+    "express": "^4.16.3",
+    "express-session": "^1.15.6",
+    "redis": "^2.8.0"
+  }
+}

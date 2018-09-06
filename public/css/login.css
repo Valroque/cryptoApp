@@ -1,0 +1,21 @@
+.login {
+  width: 20%;
+  height: 300px;
+  margin-left: 40%;
+  margin-top: 100px;
+  padding: 20px;
+  background-color: beige;
+  text-align: center;
+}
+
+.login div {
+  background-color: #d48686;
+  margin: 10px 20%;
+  width: 60%;
+  height: 30%;
+  padding: 2px;
+}
+
+.login p {
+  color: beige;
+}
