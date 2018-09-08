@@ -1,9 +1,9 @@
 var express = require('express');
 var app = express();
 var path = require('path');
-var redis = require('redis');
+var utils = require('./routes/utils.js')
+var client = utils.client;
 var bodyParser = require('body-parser');
-var client = redis.createClient();
 var session = require('express-session');
 var redisStore = require('connect-redis')(session);
 var http = require('http').Server(app);
@@ -14,6 +14,15 @@ var isLoggedIn = function(req, res, next) {
     next();
   } else {
     res.sendFile(path.resolve(__dirname, './views/login.html'));
+  }
+}
+
+var isAdmin = function(req, res, next) {
+  if(req.session && req.session.userName == 'admin') {
+    next();
+  } else {
+    req.session.destroy();
+    res.send({"status" : 0, "message" : "Unauthorized Access"});
   }
 }
 
@@ -40,22 +49,47 @@ app.use(bodyParser.json());
 app.set('views', path.resolve('./views'));
 
 app.get('/', isLoggedIn, function(req, res) {
-  res.sendFile(path.resolve(__dirname, './views/index.html'));
+  if(req.session.userName != 'admin') {
+    res.sendFile(path.resolve(__dirname, './views/index.html'));
+  } else {
+    res.sendFile(path.resolve(__dirname, './views/admin.html'));
+  }
 })
 
 app.get('/getUserList', function(req, res) {
   client.get("users", function(error, data) {
+    data = JSON.parse(data);
     if(error) {
       res.send({"status" : 0, "message" : "We are facing some issue, please comeback in some time"});
     } else {
-      console.log(data);
-      res.send({"status" : 1, "users" : ["A", "B", "C"]});
+      res.send({"status" : 1, "users" : data.users});
     }
   })
 })
 
+app.post('/login', function(req, res) {
+  client.get("user:" + req.body.userName, function(error, data) {
+    if(!error) {
+      if(data) {
+        req.session.userName = req.body.userName;
+        res.send({"status":1});
+      } else {
+        res.send({"status":0, "message":"Unable to login, please try again in some time."});
+      }
+    }
+  })
+})
+
+app.get('/logout', function(req, res) {
+  req.session.destroy();
+  res.redirect('/');
+})
+
+app.use('/user', isLoggedIn, require('./routes/general.js'));
+app.use('/admin', isAdmin, require('./routes/admin.js'));
+
 app.get('/newUser', function(req, res) {
-  var userNmae = req.body.userName;
+  var userName = req.body.userName;
   client.get("user:" + userName, function(error, data) {
     if(error) {
       res.send({"status" : 0, "message" : "Unable to create new user, please try again."});
@@ -78,8 +112,13 @@ app.get('/newUser', function(req, res) {
           }
         })
 
+        var userObj = {
+          'userName' : userName,
+          'INR' : 0
+        }
+
         //create the new "userName" object in the db
-        client.set("user:" + userName, JSON.stringify({'userName' : userName}), function(error) {
+        client.set("user:" + userName, JSON.stringify(userObj), function(error) {
           if(error) {
             res.send({"status" : 0, "message" : "Unable to create new user, please try again."});
           } else {

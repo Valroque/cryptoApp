@@ -20,11 +20,28 @@ $(document).ready(function() {
     $.ajax({
       url: '/newUser',
       data: {
-        userNmae : prompt("Enter the User Name!");
+        userName : prompt("Enter the User Name!");
       },
       success : function(data) {
         if(data.status == 0) {
           alert(data.message);
+        }
+      }
+    })
+  })
+
+  $('#loginBtn').click(function() {
+    $.ajax({
+      'url' : '/login',
+      'type' : 'POST',
+      'data' : {
+        'userName' : $('#userList').text()
+      },
+      'success' : function(data) {
+        if(data.status == 0) {
+          alert(data.message);
+        } else {
+            window.location.reload();
         }
       }
     })

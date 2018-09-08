@@ -1,0 +1,38 @@
+body {
+  background-color: #E6EAED;
+}
+
+.main {
+  width: 70%;
+  margin: 0px 15%;
+  margin-top: 100px;
+  background-color: beige;
+}
+
+.main h4 {
+  color: white;
+  margin: 0px;
+}
+
+.lockedWallet {
+  background-color: #BFFFF6;
+  width: 48%;
+  text-align: center;
+  padding: 20px 0px;
+  margin: 5px 0px 5px 2%;
+}
+
+.lockedWallet input {
+  width: 80%;
+}
+
+.lockedWallet table {
+  width : 60%;
+  margin: 0px 0px 10px 20%;
+}
+
+.unlockedWallet {
+  display: none;
+  background-color: #BFFFF6;
+  width: 50%;
+}

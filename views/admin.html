@@ -1,0 +1,38 @@
+<!doctype html>
+<html>
+    <head>
+        <script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js/dist/web3.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+        <script type="application/javascript" src="/js/admin.js"></script>
+        <link rel="stylesheet" type="text/css" href="/css/admin.css">
+    </head>
+
+    <body>
+        <div class="admin">
+            <div style="padding:10px;background-color:#368FF3;text-align:center;">
+                <h4>WELCOME ADMIN</h4>
+            </div>
+            <div class="adminWallet">
+                <p>Wallet Address</p>
+                <p id="currentAddress"></p><br>
+            </div>
+            <div class="currencies">
+                <table>
+                    <tr>
+                      <th>Currency</th>
+                      <th>Amount</th>
+                    </tr>
+                </table>
+                Add new Currency
+                <input placeholder="Token Contract Address"></input>
+                <button id="currencyAdd">Add</button>
+            </div>
+            <br>
+            <div>
+                <input placeholder="Enter New Address"></input>
+                <button id="updateAddress">Update Platform Address</button>
+            </div>
+            <button style="margin:2px 0px 8px 2%;"id="logout">Logout</button>            
+        </div>
+    </body>
+</html>

@@ -3,11 +3,28 @@
     <head>
         <script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js/dist/web3.min.js"></script>
         <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+        <script type="application/javascript" src="/js/index.js"></script>
+        <link rel="stylesheet" type="text/css" href="/css/index.css">
     </head>
 
     <body>
-        <div class="index">
-          I am logged in.
+        <div class="main">
+            <div style="padding:10px;background-color:#368FF3;text-align:center;">
+                <h4>WELCOME USER</h4>
+            </div>
+            <div class="wallet">
+                <div class="unlockedWallet">
+                  <p>Wallet Address</p>
+                  <p id="currentAddress"></p><br>
+                </div>
+                <div class="lockedWallet">
+                  <input placeholder="Enter Wallet Address"></input><br>
+                  <button id="walletAddress">Add/Update Wallet Address</button>
+                </div>
+            </div>
+            <div class="transaction">
+            </div>
+            <button style="margin:2px 0px 8px 2%;"id="logout">Logout</button>
         </div>
     </body>
 </html>
