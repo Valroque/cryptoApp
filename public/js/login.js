@@ -20,7 +20,7 @@ $(document).ready(function() {
     $.ajax({
       url: '/newUser',
       data: {
-        userName : prompt("Enter the User Name!");
+        userName : prompt("Enter the User Name!")
       },
       success : function(data) {
         if(data.status == 0) {
