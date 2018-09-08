@@ -1,3 +1,6 @@
+const web3 = new Web3();
+web3.setProvider(new web3.providers.HttpProvider('https://ropsten.infura.io/v3/0e2d13cc05494cd989d5daa04d69a0e9'));
+
 $(document).ready(function() {
   $.ajax({
       'url' : '/admin/getData',
@@ -8,7 +11,13 @@ $(document).ready(function() {
         } else {
           var adminData = data.userData;
 
-          $('#currentAddress').text(adminData.wallletAddress || "Admin please add a wallet address.");
+          if(adminData.walletAddress) {
+            $('#currentAddress').text(adminData.walletAddress);
+          } else {
+            $('#currentAddress').text("Admin please update your wallet address.");
+            $('#currentAddress').css({'color' : 'red'});
+          }
+
           $('.currencies table').append(
             '<tr>' +
                 '<td>INR</td>' +
@@ -22,7 +31,7 @@ $(document).ready(function() {
       }
   })
 
-  $('#updateAddress').click(function() {
+  $('#updateWallet').click(function() {
     var newAddress = $('.adminWallet input').val();
 
     if(validAddress(newAddress)) {
@@ -30,7 +39,7 @@ $(document).ready(function() {
         'url' : '/user/update',
         'type' : 'POST',
         data : {
-          wallletAddress : newAddress
+          walletAddress : newAddress
         },
         success : function(data) {
           if(data.status == 0) {

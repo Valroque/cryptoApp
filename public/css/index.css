@@ -14,25 +14,33 @@ body {
   margin: 0px;
 }
 
-.lockedWallet {
+.wallet {
   background-color: #BFFFF6;
-  width: 48%;
+  float: left;
+  width: 46%;
   text-align: center;
   padding: 20px 0px;
-  margin: 5px 0px 5px 2%;
+  margin: 5px 2%;
+  border: 1px solid #50E7DB;
+  border-radius: 5px;
 }
 
-.lockedWallet input {
+.wallet input {
   width: 80%;
 }
 
-.lockedWallet table {
+.wallet table {
   width : 60%;
   margin: 0px 0px 10px 20%;
 }
 
-.unlockedWallet {
-  display: none;
+.transaction {
+  float: right;
   background-color: #BFFFF6;
-  width: 50%;
+  width: 46%;
+  text-align: center;
+  padding: 20px 0px;
+  border: 1px solid #50E7DB;
+  border-radius: 5px;
+  margin: 5px 2% 5px 1%;
 }

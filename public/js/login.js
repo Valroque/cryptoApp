@@ -1,4 +1,3 @@
-console.log("here");
 $(document).ready(function() {
   $.ajax({
     url : '/getUserList',
@@ -17,25 +16,34 @@ $(document).ready(function() {
   })
 
   $("#createNewUser").click(function() {
-    $.ajax({
-      url: '/newUser',
-      data: {
-        userName : prompt("Enter the User Name!")
-      },
-      success : function(data) {
-        if(data.status == 0) {
-          alert(data.message);
+    var userName = prompt("Enter the User Name!");
+
+    if(userName == undefined || userName.length < 8) {
+      alert("Username not valid. It has to be 8 charactes long.");
+    } else {
+      $.ajax({
+        url: '/newUser',
+        data: {
+          userName : userName
+        },
+        success : function(data) {
+          if(data.status == 0) {
+            alert(data.message);
+          } else {
+            window.location.reload();
+          }
         }
-      }
-    })
+      })
+    }
   })
+
 
   $('#loginBtn').click(function() {
     $.ajax({
       'url' : '/login',
       'type' : 'POST',
       'data' : {
-        'userName' : $('#userList').text()
+        'userName' : $('#userList :selected').text()
       },
       'success' : function(data) {
         if(data.status == 0) {
