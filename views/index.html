@@ -23,8 +23,8 @@
                         <p>Wallet Private Key</p>
                         <input id="trxnPrvtKey" style="width:80%" placeholder="Enter Wallet Private Key"></input>
 
-                        <p>Receiver Address</p>
-                        <input id="trxnReceiver" style="width:80%" placeholder="Enter the receiver address"></input>
+                        <p>Receiver</p>
+                        <select id="trxnReceiver"></select>
 
                         <p>Amount</p>
                         <input id="trxnAmount" style="text-align: center" value="0"></input>
@@ -35,7 +35,12 @@
                         <p>Gas</p>
                         <input id="trxnGas"style="text-align: center" value="0"></input><br><br>
 
-                        <button id="sendTransaction">SEND</button><br><br>
+                        <button onclick="sendTransaction()">SEND</button><br><br>
+                    </div>
+                    <div class="wallet">
+                      <p>Add INR</p>
+                      <input id="addINR"></input><br>
+                      <button onclick="addINR()">Add INR</button>
                     </div>
                     <div class="wallet">
                         <p>Change Wallet Address</p>
@@ -53,7 +58,7 @@
                     </div>
                 </div>
                 <div>
-                    <button style="margin:2px 0px 8px 2%;"id="logout">Logout</button>
+                    <button style="margin:2px 0px 8px 2%;" onclick="logout()">Logout</button>
                 </div>
             </div>
         </div>

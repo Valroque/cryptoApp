@@ -4,35 +4,63 @@
         <script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js/dist/web3.min.js"></script>
         <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
         <script type="application/javascript" src="/js/admin.js"></script>
+        <script src="https://cdn.rawgit.com/ethereumjs/browser-builds/2fb69a714afe092b06645286f14b94f41e5c062c/dist/ethereumjs-tx.js"></script>
         <link rel="stylesheet" type="text/css" href="/css/admin.css">
     </head>
 
     <body>
-        <div class="admin">
+        <div class="main">
             <div style="padding:10px;background-color:#368FF3;text-align:center;">
                 <h4>WELCOME ADMIN</h4>
             </div>
-            <div class="adminWallet">
-                <p>Wallet Address</p>
-                <p id="currentAddress"></p><br>
-            </div>
-            <div class="currencies">
-                <table>
-                    <tr>
-                      <th>Currency</th>
-                      <th>Amount</th>
-                    </tr>
-                </table>
-                Add new Currency
-                <input placeholder="Token Contract Address"></input>
-                <button id="currencyAdd">Add</button>
-            </div>
-            <br>
             <div>
-                <input placeholder="Enter New Address"></input>
-                <button id="updateWallet">Update Platform Address</button>
+                <div style="overflow:auto">
+                    <div class="wallet">
+                      <p>Account Wallet Address</p>
+                      <p id="currentAddress"></p><br>
+                    </div>
+                    <div class="transaction">
+                        <p>Wallet Private Key</p>
+                        <input id="trxnPrvtKey" style="width:80%" placeholder="Enter Wallet Private Key"></input>
+
+                        <p>Receiver Address</p>
+                        <input id="trxnReceiver" style="width:80%" placeholder="Enter the receiver address"></input>
+
+                        <p>Amount</p>
+                        <input id="trxnAmount" style="text-align: center" value="0"></input>
+
+                        <p>Currency(Leave Empty for Ether)</p>
+                        <input id="trxnCurrency" style="width:50%" placeholder="Enter Token Contract Address"></select>
+
+                        <p>Gas</p>
+                        <input id="trxnGas"style="text-align: center" value="0"></input><br><br>
+
+                        <button id="sendTransaction">SEND</button><br><br>
+                    </div>
+                    <div class="wallet">
+                      <p>Add INR</p>
+                      <input id="addINR"></input><br>
+                      <button onclick="addINR()">Add INR</button>
+                    </div>
+                    <div class="wallet">
+                        <p>Change Wallet Address</p>
+                        <input id="updateWallet" placeholder="Enter Wallet Address"></input><br>
+                        <button onClick="updateWallet()">Add/Update Address</button>
+                    </div>
+                    <div class="wallet">
+                        <p>INR Balance</p>
+                        <p style="color:#2f76eb" id="balanceINR">0</p>
+                        <p>Specific Currency Balance</p>
+                        <input id="balanceCurrency" placeholder="Token Contract Address eg: 0xAeb342s..."></input><br><br>
+                        <button onclick="calculateBalance()">Get Token Balance</button>
+                        <button onclick="calculateEtherBalance()">Get Ether Balance</button>
+                        <p style="color:#2f76eb" id="balanceAmount"></p>
+                    </div>
+                </div>
+                <div>
+                    <button style="margin:2px 0px 8px 2%;" onclick="logout()">Logout</button>
+                </div>
             </div>
-            <button style="margin:2px 0px 8px 2%;"id="logout">Logout</button>
         </div>
     </body>
 </html>

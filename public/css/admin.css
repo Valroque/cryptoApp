@@ -2,14 +2,45 @@ body {
   background-color: #E6EAED;
 }
 
-.admin {
-  width: 60%;
-  margin-top: 100px;
-  margin-left: 20%;
+.main {
+  width: 70%;
+  margin: 0px 15%;
+  margin-top: 10px;
   background-color: beige;
 }
 
-.admin h4 {
+.main h4 {
   color: white;
   margin: 0px;
+}
+
+.wallet {
+  background-color: #BFFFF6;
+  float: left;
+  width: 46%;
+  text-align: center;
+  padding: 20px 0px;
+  margin: 5px 2%;
+  border: 1px solid #50E7DB;
+  border-radius: 5px;
+}
+
+.wallet input {
+  width: 80%;
+}
+
+.wallet table {
+  width : 60%;
+  margin: 0px 0px 10px 20%;
+}
+
+.transaction {
+  float: right;
+  background-color: #BFFFF6;
+  width: 46%;
+  text-align: center;
+  padding: 20px 0px;
+  border: 1px solid #50E7DB;
+  border-radius: 5px;
+  margin: 5px 2% 5px 1%;
 }

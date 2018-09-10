@@ -8,7 +8,7 @@ $(document).ready(function() {
         for(var i=0; i<data.users.length; i++) {
           var option = document.createElement('option');
           option.text = data.users[i];
-          option.id = i;
+          option.id = data.users[i];
           $('#userList').append(option);
         }
       }
