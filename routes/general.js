@@ -112,7 +112,7 @@ router.route('/tradeINR')
 
         async.parallel([
             function(callback) {
-                client.get('transactions', funtion(error, data) {
+                client.get('transactions', function(error, data) {
                     if(!error && data) {
                         data = JSON.parse(data);
                         data.transactionList.push(transaction);
