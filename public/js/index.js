@@ -22,44 +22,99 @@ $(document).ready(function() {
           $('#currentAddress').css({'color' : 'red'});
           $('#transaction').hide();
         }
+        $('#balanceINR').text(userData.INR);
+        // $('.currencies table').append(
+        //   '<tr>' +
+        //       '<td>INR</td>' +
+        //       '<td>'+userData.balanceINR+'</td>' +
+        //   '</tr>'
+        // );
+        //
+        // for(var i=0;i<userData.crypto;i++) {
+        //   //populate the currencies in the table
+        // }
+      }
+    }
+  })
+})
 
-        $('.currencies table').append(
-          '<tr>' +
-              '<td>INR</td>' +
-              '<td>'+userData.balanceINR+'</td>' +
-          '</tr>'
-        );
+$('#logout').click(function() {
+  $.ajax({
+    'url' : '/logout',
+    'type' : 'GET',
+    'success' : function() {
+      window.location.reload();
+    }
+  })
+})
 
-        for(var i=0;i<userData.crypto;i++) {
-          //populate the currencies in the table
+$('#sendTransaction').click(function() {
+  if(confirm("Are you sure?")) {
+    // var transactionData = {
+    //   trxnPrvtKey : $('#trxnPrvtKey').val(),
+    //   trxnReceiver : $('#trxnReceiver').val(),
+    //   trxnAmount : $('#trxnAmount').val(),
+    //   trxnCurrency : ,
+    //   trxnGas : $('#trxnGas').val()
+    // }
+
+    var userData = JSON.parse(window.localStorage.getItem('userData'));
+
+    web3.eth.getTransactionCount(userData.walletAddress, function (error, nonce) {
+        if(error) {
+            alert(error);
+        } else {
+            console.log(nonce);
+            var tokenAddress = $('#trxnCurrency').val() || '0xBB9bc244D798123fDe783fCc1C72d3Bb8C189413';
+            var privateKey = new EthJS.Buffer.Buffer($('#trxnPrvtKey').val(), 'hex');
+            var gasPrice = '0x' + web3.eth.gasPrice.toString(16);
+            var gas = '0x' + web3.toHex(web3.toWei($('#trxnGas').val(), 'ether'));
+            var value = web3.toHex(web3.toWei($('#trxnAmount').val(), 'ether'));
+            var receiver = $('#trxnReceiver').val();
+            //console.log(tokenAddress, privateKey, gasPrice, gas, value);
+            $.ajax({
+                'type' : 'GET',
+                'url' : 'https://api.etherscan.io/api?module=contract&action=getabi&address=' + tokenAddress,
+                'success' : function(abiData) {
+                  var abi = "";
+                  abi = JSON.parse(abiData.result);
+
+                  if(abi) {
+                      contract = web3.eth.contract(abi).at(tokenAddress);
+                      var data = contract.transfer.getData(receiver, 10000, {from: userData.walletAddress});
+
+                      var rawTx = {
+                         nonce: nonce,
+                         gasPrice: gasPrice,
+                         gasLimit: gas,
+                         to: receiver,
+                         value: value,
+                         data: data
+                      }
+
+                      var tx = new EthJS.Tx(rawTx);
+                      tx.sign(privateKey);
+                      var serializedTx = tx.serialize();
+                      //console.log(serializedTx);
+                      web3.eth.sendRawTransaction('0x' + serializedTx.toString('hex'), function(error, hash) {
+                         if (!error) {
+                            alert('Your transaction has been initiated. You can find the link to monitor the progress.');
+                            $('#trxnHash').remove();
+                            $('.transaction').append('<a id="trxnHash" style="text-decoration: none;" href="' +
+                            'https://ropsten.etherscan.io/tx/' + hash + '">View Transaction Status</a>');
+                         } else {
+                            alert(error)
+                         }
+                      });
+                  } else {
+                      alert('Error Proceeding with the transaction.');
+                  }
+                }
+            })
         }
-      }
-    }
-  })
+    });
 
-  $('#logout').click(function() {
-    $.ajax({
-      'url' : '/logout',
-      'type' : 'GET',
-      'success' : function() {
-        window.location.reload();
-      }
-    })
-  })
-
-  $('#sendTransaction').click(function() {
-    if(confirm("Are you sure?")) {
-      var transactionData = {
-        trxnPrvtKey : $('#trxnPrvtKey').val(),
-        trxnReceiver : $('#trxnReceiver').val(),
-        trxnAmount : $('#trxnAmount').val(),
-        trxnCurrency : $('#trxnCurrency').val() || '0xBB9bc244D798123fDe783fCc1C72d3Bb8C189413',
-        trxnGas : $('#trxnGas').val()
-      }
-
-      console.log(transactionData);
-    }
-  })
+  }
 })
 
 var updateWallet = function() {
@@ -73,8 +128,14 @@ var updateWallet = function() {
         'walletAddress' : newAddress
       },
       'success' : function(data) {
+        if(data.status == 1) {
+          var userData = JSON.parse(window.localStorage.getItem('userData'));
+          userData.walletAddress = newAddress;
+          window.localStorage.setItem('userData', JSON.stringify(userData));
+          $('#currentAddress').text(newAddress);
+        }
+
         alert(data.message);
-        $('#currentAddress').text(newAddress);
       }
     })
   } else {
@@ -103,7 +164,14 @@ var calculateBalance = function() {
 
           if (contractABI != ''){
               var MyContract = web3.eth.contract(contractABI).at(tokenAddress);
-              $('#balanceAmount').text("Balance :" + MyContract._eth.getBalance(userData.walletAddress).toString(10)/Math.pow(10,18));
+              var balance = MyContract._eth.getBalance(userData.walletAddress).toString(10)/Math.pow(10,18);
+
+              if(balance || balance == 0) {
+                $('#balanceAmount').text("Balance : " + balance);
+              } else {
+                alert('We are having some issue, please try again later.');
+              }
+
           } else {
               console.log("Error" );
           }
