@@ -11,7 +11,7 @@ router.route('/getData')
 .get(function(req, res) {
   var userName = req.session.userName;
 
-  client.get("user:"+userName, function(error, data) {    
+  client.get("user:"+userName, function(error, data) {
     if(!error && data) {
       data = JSON.parse(data);
       data.rate = utils.rate;
@@ -196,7 +196,7 @@ router.route('/tradeINR')
                 client.get('transactions', function(error, data) {
                     if(!error && data) {
                         data = JSON.parse(data);
-                        data.transactionList.push(transaction);
+                        data.transactionList.push(transactionHash);
 
                         client.set('transactions', JSON.stringify(data), function(error) {
                             if(error) {
