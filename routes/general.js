@@ -11,9 +11,10 @@ router.route('/getData')
 .get(function(req, res) {
   var userName = req.session.userName;
 
-  client.get("user:"+userName, function(error, data) {
+  client.get("user:"+userName, function(error, data) {    
     if(!error && data) {
       data = JSON.parse(data);
+      data.rate = utils.rate;
       res.send({ "status" : 1, "userData": data })
     } else {
       req.session.destroy();

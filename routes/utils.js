@@ -12,3 +12,4 @@ var transactionLimit = 100000;
 exports.client = client;
 exports.web3 = web3;
 exports.transactionLimit = transactionLimit;
+exports.rate = rate;

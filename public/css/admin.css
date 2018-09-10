@@ -1,5 +1,6 @@
 body {
   background-color: #E6EAED;
+  font-family: Courier New;
 }
 
 .main {
@@ -7,6 +8,7 @@ body {
   margin: 0px 15%;
   margin-top: 10px;
   background-color: beige;
+  text-align: center;
 }
 
 .main h4 {
@@ -14,12 +16,17 @@ body {
   margin: 0px;
 }
 
+.heading {
+  color: crimson;
+  margin-top: 0px;
+}
+
 .wallet {
   background-color: #BFFFF6;
   float: left;
   width: 46%;
   text-align: center;
-  padding: 20px 0px;
+  padding: 10px 0px;
   margin: 5px 2%;
   border: 1px solid #50E7DB;
   border-radius: 5px;
@@ -39,7 +46,7 @@ body {
   background-color: #BFFFF6;
   width: 46%;
   text-align: center;
-  padding: 20px 0px;
+  padding: 10px 0px;
   border: 1px solid #50E7DB;
   border-radius: 5px;
   margin: 5px 2% 5px 1%;

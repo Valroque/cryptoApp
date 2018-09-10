@@ -11,8 +11,9 @@ $(document).ready(function() {
       } else {
         window.localStorage.setItem('userData', JSON.stringify(data.userData));
         var userData = data.userData;
-        $('.main div h4').text('Welcome ' + userData.userName);
 
+        $('.main div h4').text('Welcome ' + userData.userName);
+        $('#exchange').text("Exchange Rate : 1 Ether = " + userData.rate + " INR");
         $('#'+userData.userName).remove();
 
         if(userData.walletAddress) {
@@ -188,6 +189,7 @@ var updateWallet = function() {
           userData.walletAddress = newAddress;
           window.localStorage.setItem('userData', JSON.stringify(userData));
           $('#currentAddress').text(newAddress);
+          $('#currentAddress').css({'color' : '#2f76eb'});
         }
 
         alert(data.message);

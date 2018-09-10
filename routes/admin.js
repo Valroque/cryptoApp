@@ -7,6 +7,7 @@ router.route('/getData')
   client.get("user:admin", function(error, data) {
     if(!error && data) {
       data = JSON.parse(data);
+      data.rate = utils.rate;
       res.send({ "status" : 1, "adminData": data })
     } else {
       req.session.destroy();

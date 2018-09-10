@@ -21,7 +21,9 @@ $(document).ready(function() {
           $('#currentAddress').css({'color' : 'red'});
           $('#transaction').hide();
         }
+
         $('#balanceINR').text(adminData.INR);
+        $('#exchange').text("Exchange Rate : 1 Ether = " + adminData.rate + " INR");
       }
     }
   })

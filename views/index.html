@@ -15,11 +15,16 @@
             </div>
             <div>
                 <div style="overflow:auto">
+                    <div class="transaction">
+                        <p id="exchange"></p>
+                    </div>
                     <div class="wallet">
-                      <p>Account Wallet Address</p>
-                      <p id="currentAddress"></p><br>
+                        <p class="heading">Account Wallet Address</p>
+                        <p id="currentAddress"></p><br>
                     </div>
                     <div class="transaction">
+                        <p style="margin-top:0px" class="heading">SEND ETHER</p>
+
                         <p>Wallet Private Key</p>
                         <input id="trxnPrvtKey" style="width:80%" placeholder="Enter Wallet Private Key"></input>
 
@@ -40,17 +45,17 @@
                         <div class="transactionEther"></div>
                     </div>
                     <div class="wallet">
-                      <p>Add INR</p>
+                      <p class="heading">Add INR</p>
                       <input id="addINR"></input><br>
                       <button onclick="addINR()">Add INR</button>
                     </div>
                     <div class="wallet">
-                        <p>Change Wallet Address</p>
+                        <p class="heading">Change Wallet Address</p>
                         <input id="updateWallet" placeholder="Enter Wallet Address"></input><br>
                         <button onClick="updateWallet()">Add/Update Address</button>
                     </div>
-                    <div class="wallet">
-                        <p>INR Balance</p>
+                    <div class="wallet" style="margin-bottom:10px">
+                        <p class="heading">INR Balance</p>
                         <p style="color:#2f76eb" id="balanceINR">0</p>
                         <p>Specific Currency Balance</p>
                         <input id="balanceCurrency" placeholder="Token Contract Address eg: 0xAeb342s..."></input><br><br>
@@ -59,7 +64,8 @@
                         <p style="color:#2f76eb" id="balanceAmount"></p>
                     </div>
                     <div class="transaction">
-                        <input style="width:60%;" id="purchaseEther" /placeholder="Enter Amount to purchase (in ethers)"></input><br>
+                        <p class="heading">Buy Ether</p>
+                        <input style="width:60%;" id="purchaseEther" /placeholder="Enter Amount to purchase (in ethers)"></input>
                         <button onclick="purchaseEther()">PURCHASE ETHER</button><br><br>
                         <div class="purchaseEther"></div>
                     </div>
