@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/Valroque/crytoApp#readme",
   "dependencies": {
+    "async": "^2.6.1",
     "connect-redis": "^3.3.3",
     "express": "^4.16.3",
     "express-session": "^1.15.6",

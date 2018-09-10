@@ -69,13 +69,6 @@ var sendTransaction = function() {
         if(error) {
             alert(error);
         } else {
-            var tokenAddress = $('#trxnCurrency').val() || '0xBB9bc244D798123fDe783fCc1C72d3Bb8C189413';
-            var privateKey = new EthJS.Buffer.Buffer($('#trxnPrvtKey').val(), 'hex');
-            var gasPrice = '0x' + web3.eth.gasPrice.toString(16);
-            var gas = '0x' + web3.toHex(web3.toWei($('#trxnGas').val(), 'ether'));
-            var value = web3.toHex(web3.toWei($('#trxnAmount').val(), 'ether'));
-            var equINRValue = $('#trxnAmount').val() * 100; //assuming 1 ether = 100INR
-
             $.ajax({
               'type' : 'POST',
               'url' : '/user/getReceiverData',
@@ -86,49 +79,12 @@ var sendTransaction = function() {
                 if(data.staus == 0) {
                   alert(data.message);
                 } else {
+                  var equINRValue = $('#trxnAmount').val() * 100; //assuming 1 ether = 100INR
                   var receiver = data.receiverData.walletAddress;
                   var reveiverINRBalance = data.receiverData.INR;
 
                   if(reveiverINRBalance >= equINRValue) {
-                    $.ajax({
-                        'type' : 'GET',
-                        'url' : 'https://api.etherscan.io/api?module=contract&action=getabi&address=' + tokenAddress,
-                        'success' : function(abiData) {
-                            var abi = "";
-                            abi = JSON.parse(abiData.result);
-
-                            if(abi) {
-                                contract = web3.eth.contract(abi).at(tokenAddress);
-                                var data = contract.transfer.getData(receiver, 10000, {from: userData.walletAddress});
-
-                                var rawTx = {
-                                   nonce: nonce,
-                                   gasPrice: gasPrice,
-                                   gasLimit: gas,
-                                   to: receiver,
-                                   value: value,
-                                   data: data
-                                }
-
-                                var tx = new EthJS.Tx(rawTx);
-                                tx.sign(privateKey);
-                                var serializedTx = tx.serialize();
-                                //console.log(serializedTx);
-                                web3.eth.sendRawTransaction('0x' + serializedTx.toString('hex'), function(error, hash) {
-                                   if (!error) {
-                                      alert('Your transaction has been initiated. You can find the link to monitor the progress.');
-                                      $('#trxnHash').remove();
-                                      $('.transaction').append('<a id="trxnHash" style="text-decoration: none;" href="' +
-                                      'https://ropsten.etherscan.io/tx/' + hash + '">View Transaction Status</a>');
-                                   } else {
-                                      alert(error)
-                                   }
-                                });
-                            } else {
-                                alert('Error Proceeding with the transaction.');
-                            }
-                        }
-                    })
+                      proceedTransaction(receiver, userData);
                   } else {
                       alert('Receiver has indequet INR');
                   }
@@ -137,8 +93,83 @@ var sendTransaction = function() {
             })
         }
     });
-
   }
+}
+
+var proceedTransaction(receiver, userData) {
+    var tokenAddress = $('#trxnCurrency').val() || '0xBB9bc244D798123fDe783fCc1C72d3Bb8C189413';
+    var privateKey = new EthJS.Buffer.Buffer($('#trxnPrvtKey').val(), 'hex');
+    var gasPrice = '0x' + web3.eth.gasPrice.toString(16);
+    var gas = '0x' + web3.toHex(web3.toWei($('#trxnGas').val(), 'ether'));
+    var value = web3.toHex(web3.toWei($('#trxnAmount').val(), 'ether'));
+
+    $.ajax({
+        'type' : 'GET',
+        'url' : 'https://api.etherscan.io/api?module=contract&action=getabi&address=' + tokenAddress,
+        'success' : function(abiData) {
+            var abi = "";
+            abi = JSON.parse(abiData.result);
+
+            if(abi) {
+                contract = web3.eth.contract(abi).at(tokenAddress);
+                var data = contract.transfer.getData(receiver, 10000, {from: userData.walletAddress});
+
+                var rawTx = {
+                   nonce: nonce,
+                   gasPrice: gasPrice,
+                   gasLimit: gas,
+                   to: receiver,
+                   value: value,
+                   data: data
+                }
+
+                var tx = new EthJS.Tx(rawTx);
+                tx.sign(privateKey);
+                var serializedTx = tx.serialize();
+
+                web3.eth.sendRawTransaction('0x' + serializedTx.toString('hex'), function(error, hash) {
+                   if (!error) {
+                      alert('Your transaction has been initiated. You can find the link to monitor the progress.');
+                      $('#trxnHash').remove();
+                      $('.transaction').append('<a id="trxnHash" style="text-decoration: none;" href="' +
+                      'https://ropsten.etherscan.io/tx/' + hash + '">View Transaction Status</a>');
+
+                      $.ajax({
+                        'url' : '/user/tradeINR',
+                        'type' : 'POST',
+                        'data' : {
+                            'receiver' : userName,
+                            'sender' : userData.userName,
+                            'transactionHash' : hash
+                        },
+                        'success' : function(data) {
+                            alert(data.message);
+                            if(data.status == 1) {
+                                $('#balanceINR').text(updateINR());
+                            }
+                        }
+                      })
+                   } else {
+                      alert(error)
+                   }
+                });
+            } else {
+                alert('Error: Please Check the token address.');
+            }
+        }
+    })
+}
+
+var updateINR = function() {
+    $.ajax({
+      'type' : 'GET',
+      'url' : '/user/getINRBalance',
+      'success' : function(data) {
+        if(data.status == 1) {
+          return data.balanceINR;
+        }
+      }
+    })
 }
 
 var updateWallet = function() {
