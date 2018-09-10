@@ -51,7 +51,7 @@ app.set('views', path.resolve('./views'));
 app.get('/', isLoggedIn, function(req, res) {
     if(req.session.userName != 'admin') {
         res.sendFile(path.resolve(__dirname, './views/index.html'));
-    } else {
+    } else {  
         res.sendFile(path.resolve(__dirname, './views/admin.html'));
     }
 })

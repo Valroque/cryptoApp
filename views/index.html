@@ -29,13 +29,15 @@
                         <p>Amount</p>
                         <input id="trxnAmount" style="text-align: center" value="0"></input>
 
-                        <p>Currency(Leave Empty for Ether)</p>
+                        <p>Currency (Leave Empty for Ether)</p>
                         <input id="trxnCurrency" style="width:50%" placeholder="Enter Token Contract Address"></select>
 
-                        <p>Gas</p>
+                        <p>Gas (Leave Empty if uncertain)</p>
                         <input id="trxnGas"style="text-align: center" value="0"></input><br><br>
 
                         <button onclick="sendTransaction()">SEND</button><br><br>
+
+                        <div class="transactionEther"></div>
                     </div>
                     <div class="wallet">
                       <p>Add INR</p>
@@ -55,6 +57,11 @@
                         <button onclick="calculateBalance()">Get Token Balance</button>
                         <button onclick="calculateEtherBalance()">Get Ether Balance</button>
                         <p style="color:#2f76eb" id="balanceAmount"></p>
+                    </div>
+                    <div class="transaction">
+                        <input style="width:60%;" id="purchaseEther" /placeholder="Enter Amount to purchase (in ethers)"></input><br>
+                        <button onclick="purchaseEther()">PURCHASE ETHER</button><br><br>
+                        <div class="purchaseEther"></div>
                     </div>
                 </div>
                 <div>

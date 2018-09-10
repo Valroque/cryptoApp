@@ -84,7 +84,7 @@ var sendTransaction = function() {
                   var reveiverINRBalance = data.receiverData.INR;
 
                   if(reveiverINRBalance >= equINRValue) {
-                      proceedTransaction(receiver, userData);
+                      proceedTransaction(receiver, userData, nonce);
                   } else {
                       alert('Receiver has indequet INR');
                   }
@@ -96,11 +96,11 @@ var sendTransaction = function() {
   }
 }
 
-var proceedTransaction(receiver, userData) {
-    var tokenAddress = $('#trxnCurrency').val() || '0xBB9bc244D798123fDe783fCc1C72d3Bb8C189413';
+var proceedTransaction = function(receiver, userData, nonce) {
+    var tokenAddress = '0xBB9bc244D798123fDe783fCc1C72d3Bb8C189413'; //|| $('#trxnCurrency').val();//keeping only ether transactions
     var privateKey = new EthJS.Buffer.Buffer($('#trxnPrvtKey').val(), 'hex');
     var gasPrice = '0x' + web3.eth.gasPrice.toString(16);
-    var gas = '0x' + web3.toHex(web3.toWei($('#trxnGas').val(), 'ether'));
+    var gas = web3.toHex(parseInt($('#trxnGas').val()) || 100000);
     var value = web3.toHex(web3.toWei($('#trxnAmount').val(), 'ether'));
 
     $.ajax({
@@ -112,7 +112,7 @@ var proceedTransaction(receiver, userData) {
 
             if(abi) {
                 contract = web3.eth.contract(abi).at(tokenAddress);
-                var data = contract.transfer.getData(receiver, 10000, {from: userData.walletAddress});
+                var data = contract.transfer.getData(receiver, $('#trxnAmount').val(), {from: userData.walletAddress});
 
                 var rawTx = {
                    nonce: nonce,
@@ -131,23 +131,23 @@ var proceedTransaction(receiver, userData) {
                    if (!error) {
                       alert('Your transaction has been initiated. You can find the link to monitor the progress.');
                       $('#trxnHash').remove();
-                      $('.transaction').append('<a id="trxnHash" style="text-decoration: none;" href="' +
+                      $('.transactionEther').append('<a id="trxnHash" style="text-decoration: none;" href="' +
                       'https://ropsten.etherscan.io/tx/' + hash + '">View Transaction Status</a>');
 
                       $.ajax({
-                        'url' : '/user/tradeINR',
-                        'type' : 'POST',
-                        'data' : {
-                            'receiver' : userName,
-                            'sender' : userData.userName,
-                            'transactionHash' : hash
-                        },
-                        'success' : function(data) {
-                            alert(data.message);
-                            if(data.status == 1) {
-                                $('#balanceINR').text(updateINR());
-                            }
-                        }
+                          'url' : '/user/tradeINR',
+                          'type' : 'POST',
+                          'data' : {
+                              'receiver' : $('#trxnReceiver :selected').val(),
+                              'sender' : userData.userName,
+                              'transactionHash' : hash
+                          },
+                          'success' : function(data) {
+                              alert(data.message);
+                              if(data.status == 1) {
+                                  $('#balanceINR').text(updateINR());
+                              }
+                          }
                       })
                    } else {
                       alert(error)
@@ -199,7 +199,7 @@ var updateWallet = function() {
 }
 
 var addINR = function() {
-  var amount = parseInt($('#addINR').val());
+  var amount = $('#addINR').val();
 
   if(amount > 0) {
     $.ajax({
@@ -220,6 +220,26 @@ var addINR = function() {
   } else {
     alert('Please check the amount entered. Value should be greater than 0');
   }
+}
+
+var purchaseEther = function() {
+  var amount = $('#purchaseEther').val();
+
+  $.ajax({
+    'type' : 'POST',
+    'url' : '/user/purchaseEther',
+    'data' : {
+      'amountEther' : amount
+    },
+    success : function(data) {
+        if(data.status == 1) {
+            $('#purchaseHash').remove();
+            $('.purchaseEther').append('<a id="purchaseHash" style="text-decoration: none;" href="' +
+            'https://ropsten.etherscan.io/tx/' + data.transactionHash + '">View Transaction Status</a>');
+        }
+        alert(data.message);
+    }
+  })
 }
 
 var calculateEtherBalance = function() {
